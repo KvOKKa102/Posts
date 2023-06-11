@@ -43,10 +43,10 @@ class WallServiceTest {
 
     @Test
     fun updateExistingTrue() {
-        val postBeforeAdd: Posts = Posts(ownerId = 1)
-        val postBeforeUpdate: Posts = WallService.add(postBeforeAdd)
-        postBeforeAdd.text = "Update Record"
-        val isUpdate: Boolean = WallService.update(postBeforeAdd)
+        val postBeforeAdd = Posts(ownerId = 1)
+        val postBeforeUpdate = WallService.add(postBeforeAdd.copy())
+        postBeforeUpdate.text = "Update Record"
+        val isUpdate = WallService.update(postBeforeUpdate.copy())
 
         println(isUpdate)
         assertTrue(isUpdate)

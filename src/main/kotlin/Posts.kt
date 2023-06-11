@@ -44,21 +44,21 @@ object WallService {
     private var uniqId: Int = 0
     fun add(post: Posts): Posts {
         uniqId++
-        post.id = uniqId
-        post.text = "Запись #$uniqId"
-        posts += post
-        return posts.last()
+        val newPost = post.copy()
+        newPost.id = uniqId
+        newPost.text = "Запись #$uniqId"
+        posts += newPost
+        return newPost
     }
 
     fun update(post: Posts): Boolean {
-        var update: Boolean = false
-        for (oldPost in posts) {
-            if (oldPost.id == post.id) {
-                posts[oldPost.id - 1] = post.copy()
-                update = true
+        for (index in posts.indices) {
+            if (posts[index].id == post.id) {
+                posts[index] = post.copy()
+                return true
             }
         }
-        return update
+        return false
     }
 
     fun clear() {
