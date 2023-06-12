@@ -1,29 +1,38 @@
 import java.time.LocalDate
 
 data class Posts(
-    var id: Int = 0,
+    var id: Int? = null,
     val ownerId: Int,
+    val fromId: Int? = null,
+    val createdBy: Int? = null,
     val date: LocalDate = LocalDate.now(),
-    var text: String = "contains nothing",
+    var text: String? = null,
+    val replyOwnerId: Int? = null,
+    val replyPostId: Int? = null,
     val friendsOnly: Boolean = false,
-    var comments: Comments = Comments(),
+    val comments: Comments = Comments(),
     val likes: Likes = Likes(),
     val reposts: Reposts = Reposts(),
-    val views: Int = 0,
+    val views: Views? = null,
     val postType: PostType = PostType.REPLY,
+    val canPin: Boolean = false,
     val canDelete: Boolean = true,
     val canEdit: Boolean = true,
-    val isFavorite: Boolean = false
+    val isPinned: Boolean = false,
+    val markedAsAds: Boolean = false,
+    val isFavorite: Boolean = false,
+    val postponedId: Int? = null
 ) {
     enum class PostType {
         POST, COPY, REPLY, POSTPONE, SUGGEST
     }
 
-    class Comments(
-        count: Int = 0,
-        canPost: Boolean = true,
-        canClose: Boolean = true,
-        canOpen: Boolean = true
+    data class Comments(
+        val count: Int = 0,
+        val canPost: Boolean = true,
+        val groupsCanPost: Boolean? = null,
+        val canClose: Boolean = true,
+        val canOpen: Boolean = true
     )
 
     class Likes(
@@ -36,6 +45,10 @@ data class Posts(
     class Reposts(
         val count: Int = 0,
         val userReposted: Boolean = false
+    )
+
+    data class Views(
+        val count: Int? = null
     )
 }
 
