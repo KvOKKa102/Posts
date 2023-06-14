@@ -1,6 +1,6 @@
 import java.time.LocalDate
 
-data class Posts(
+data class Posts<T>(
     var id: Int? = null,
     val ownerId: Int,
     val fromId: Int? = null,
@@ -21,7 +21,8 @@ data class Posts(
     val isPinned: Boolean = false,
     val markedAsAds: Boolean = false,
     val isFavorite: Boolean = false,
-    val postponedId: Int? = null
+    val postponedId: Int? = null,
+    val attachments: Array<Attachments> = emptyArray()
 ) {
     enum class PostType {
         POST, COPY, REPLY, POSTPONE, SUGGEST
@@ -50,12 +51,91 @@ data class Posts(
     data class Views(
         val count: Int? = null
     )
+
 }
 
+interface Attachments {
+    val type: String
+}
+
+data class Video(
+    override val type: String = "video",
+    val id: Int,
+    val ownerId: Int,
+    val title: String,
+    val description: String? = null,
+    val duration: Int,
+    val image: List<Image> = emptyList()
+) : Attachments {
+    data class Image(
+        val url: String,
+        val width: Int,
+        val height: Int
+    )
+}
+
+data class Audio(
+    override val type: String = "audio",
+    val id: Int,
+    val ownerId: Int,
+    val artist: String,
+    val title: String,
+    val duration: Int,
+    val url: String? = null
+) : Attachments
+
+data class Document(
+    override val type: String = "doc",
+    val id: Int,
+    val ownerId: Int,
+    val title: String,
+    val size: Int,
+    val url: String? = null
+) : Attachments
+
+data class Link(
+    override val type: String = "link",
+    val url: String,
+    val title: String,
+    val caption: String? = null
+) : Attachments
+
+data class Album(
+    override val type: String = "albumAttachments",
+    val id: Int,
+    val thumb: Photo,
+    val ownerId: Int,
+    val title: String,
+    val description: String? = null,
+    val created: Long,
+    val updated: Long,
+    val size: Int
+) : Attachments {
+    data class Photo(
+        val id: Int,
+        val albumId: Int,
+        val ownerId: Int,
+        val userId: Int? = null,
+        val text: String? = null,
+        val date: Long? = null,
+        val sizes: Array<Size> = emptyArray(),
+        val width: Int? = null,
+        val height: Int? = null
+    ) {
+        data class Size(
+            val type: String,
+            val url: String,
+            val width: Int,
+            val height: Int
+        )
+    }
+}
+
+
 object WallService {
-    private var posts = emptyArray<Posts>()
+    private var posts = emptyArray<Posts<Any?>>()
     private var uniqId: Int = 0
-    fun add(post: Posts): Posts {
+    fun add(post: Posts<Any?>): Posts<Any?> {
         uniqId++
         val newPost = post.copy()
         newPost.id = uniqId
@@ -64,7 +144,7 @@ object WallService {
         return newPost
     }
 
-    fun update(post: Posts): Boolean {
+    fun update(post: Posts<Any?>): Boolean {
         for (index in posts.indices) {
             if (posts[index].id == post.id) {
                 posts[index] = post.copy()

@@ -13,13 +13,13 @@ class WallServiceTest {
     @Test
     fun addPost() {
 
-        val postBeforeAdd1: Posts = Posts(ownerId = 1)
-        val postBeforeAdd2: Posts = Posts(ownerId = 2)
-        val postBeforeAdd3: Posts = Posts(ownerId = 3)
+        val postBeforeAdd1: Posts<Any?> = Posts(ownerId = 1)
+        val postBeforeAdd2: Posts<Any?> = Posts(ownerId = 2)
+        val postBeforeAdd3: Posts<Any?> = Posts(ownerId = 3)
 
-        val post1: Posts = WallService.add(postBeforeAdd1)
-        val post2: Posts = WallService.add(postBeforeAdd2)
-        val post3: Posts = WallService.add(postBeforeAdd3)
+        val post1: Posts<Any?> = WallService.add(postBeforeAdd1)
+        val post2: Posts<Any?> = WallService.add(postBeforeAdd2)
+        val post3: Posts<Any?> = WallService.add(postBeforeAdd3)
 
         assertEquals(1, post1.id)
         assertEquals(2, post2.id)
@@ -28,22 +28,22 @@ class WallServiceTest {
 
     @Test
     fun updateExistingFalse() {
-        val postBeforeAdd1: Posts = Posts(ownerId = 1)
-        val postBeforeAdd2: Posts = Posts(ownerId = 2)
-        val postBeforeAdd3: Posts = Posts(ownerId = 3)
+        val postBeforeAdd1: Posts<Any?> = Posts(ownerId = 1)
+        val postBeforeAdd2: Posts<Any?> = Posts(ownerId = 2)
+        val postBeforeAdd3: Posts<Any?> = Posts(ownerId = 3)
 
-        val post1: Posts = WallService.add(postBeforeAdd1)
-        val post2: Posts = WallService.add(postBeforeAdd2)
-        val post3: Posts = WallService.add(postBeforeAdd3)
+        val post1: Posts<Any?> = WallService.add(postBeforeAdd1)
+        val post2: Posts<Any?> = WallService.add(postBeforeAdd2)
+        val post3: Posts<Any?> = WallService.add(postBeforeAdd3)
 
-        val postUpdate: Posts = Posts(id = 4, ownerId = 4, text = "Update Record")
+        val postUpdate: Posts<Any?> = Posts(id = 4, ownerId = 4, text = "Update Record")
         val isUpdate = WallService.update(postUpdate)
         assertFalse(isUpdate)
     }
 
     @Test
     fun updateExistingTrue() {
-        val postBeforeAdd = Posts(ownerId = 1)
+        val postBeforeAdd = Posts<Any?>(ownerId = 1)
         val postBeforeUpdate = WallService.add(postBeforeAdd.copy())
         postBeforeUpdate.text = "Update Record"
         val isUpdate = WallService.update(postBeforeUpdate.copy())
