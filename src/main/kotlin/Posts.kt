@@ -51,22 +51,23 @@ data class Posts<T>(
     data class Views(
         val count: Int? = null
     )
-
 }
 
 interface Attachments {
     val type: String
 }
-
-data class Video(
+data class VideoAttachments (
     override val type: String = "video",
+    val video: Video
+): Attachments
+data class Video(
     val id: Int,
     val ownerId: Int,
     val title: String,
     val description: String? = null,
     val duration: Int,
     val image: List<Image> = emptyList()
-) : Attachments {
+) {
     data class Image(
         val url: String,
         val width: Int,
@@ -74,34 +75,46 @@ data class Video(
     )
 }
 
-data class Audio(
+data class AudioAttachments(
     override val type: String = "audio",
+    val audio: Audio
+): Attachments
+data class Audio(
     val id: Int,
     val ownerId: Int,
     val artist: String,
     val title: String,
     val duration: Int,
     val url: String? = null
-) : Attachments
+)
 
+data class DocumentAttachment(
+    override val type: String = "Doc",
+    val document: Document
+): Attachments
 data class Document(
-    override val type: String = "doc",
     val id: Int,
     val ownerId: Int,
     val title: String,
     val size: Int,
     val url: String? = null
-) : Attachments
+)
 
+data class LInkAttachment(
+    override val type: String = "Link",
+    val link: Link
+) : Attachments
 data class Link(
-    override val type: String = "link",
     val url: String,
     val title: String,
     val caption: String? = null
-) : Attachments
+)
 
-data class Album(
+data class AlbumAttachments (
     override val type: String = "albumAttachments",
+    val album: Album
+): Attachments
+data class Album (
     val id: Int,
     val thumb: Photo,
     val ownerId: Int,
@@ -110,7 +123,7 @@ data class Album(
     val created: Long,
     val updated: Long,
     val size: Int
-) : Attachments {
+) {
     data class Photo(
         val id: Int,
         val albumId: Int,
@@ -130,7 +143,6 @@ data class Album(
         )
     }
 }
-
 
 object WallService {
     private var posts = emptyArray<Posts<Any?>>()
